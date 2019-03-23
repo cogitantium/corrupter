@@ -33,7 +33,6 @@ func offset(m float64) int {
 }
 
 func brighten(r uint32, add uint32) uint32 {
-	// return r*4/6 + 20000
 	return r - r*add/65535 + add
 }
 
@@ -76,10 +75,7 @@ func main() {
 	line_off := 0
 	stride := 0.
 	yset := 0
-	// const MAG = 2.5
 	MAG := *magPtr
-	// const MAG = 0
-	// const MAG = 3
 	BHEIGHT := *blockHeightPtr
 	BOFFSET := *blockOffsetPtr
 	STRIDE_MAG := *strideMagPtr
@@ -104,7 +100,6 @@ func main() {
 	new_img1 := image.NewRGBA(b)
 
 	lr, lg, lb := *lrPtr, *lgPtr, *lbPtr
-	// lr, lg, lb := 0., 0., 0.
 	LAG := *lagPtr
 	ADD := uint32(*addPtr) << 8
 	STD_OFFSET := *stdOffsetPtr
@@ -136,7 +131,6 @@ func main() {
 	STD_ABBER := *stdAbberPtr
 	for y := b.Min.Y; y < b.Max.Y; y++ {
 		for x := b.Min.X; x < b.Max.X; x++ {
-			// offx := 10 + offset(40)
 			offx := MEAN_ABBER + offset(STD_ABBER) // lower offset arg = longer trails
 			r, _, _, a := new_img1.At(
 				wrap(x+offx, b.Min.X, b.Max.X),
@@ -150,21 +144,6 @@ func main() {
 			new_img1.Set(x, y, uint32_to_rgba(r, g, b, a))
 		}
 	}
-	// for y := b.Min.Y; y < b.Max.Y; y++ {
-	// 	for x := b.Min.X; x < b.Max.X; x++ {
-	// 		offx := 10
-	// 		r, _, _, a := new_img.At(
-	// 			wrap(x+offx, b.Min.X, b.Max.X),
-	// 			wrap(y, b.Min.Y, b.Max.Y)).RGBA()
-	// 		_, g, _, _ := new_img.At(
-	// 			wrap(x, b.Min.X, b.Max.X),
-	// 			wrap(y, b.Min.Y, b.Max.Y)).RGBA()
-	// 		_, _, b, _ := new_img.At(
-	// 			wrap(x-offx, b.Min.X, b.Max.X),
-	// 			wrap(y, b.Min.Y, b.Max.Y)).RGBA()
-	// 		new_img.Set(x, y, uint32_to_rgba(r, g, b, a))
-	// 	}
-	// }
 
 	writer, err := os.Create(flag.Args()[1])
 	check(err)
